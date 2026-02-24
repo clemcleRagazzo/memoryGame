@@ -82,7 +82,9 @@ def evening_routine():
         user_input = input(
             "Entrez le code du matin (ou tapez 'abandon' pour le révéler) : "
         )
-        if user_input.lower() == "abandon":
+        if (
+            user_input.lower() == "abandon"
+        ): 
             print(f"Le code était : {last_code}")
             break
         elif user_input == last_code:
