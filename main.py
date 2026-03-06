@@ -60,7 +60,7 @@ def write_new_entry(code):
         file.write(f"{get_today_date()}: {code}\n")
 
 
-def morning_routine():
+def morning_routine() -> int:
     today, last_code = read_last_entry()
     if today and today.startswith(date.today().strftime("%Y-%m-%d")):
         print(f"Le numéro du jour a déjà été généré")
@@ -68,6 +68,7 @@ def morning_routine():
         new_code = generate_code()
         write_new_entry(new_code)
         print(f"Numéro du jour : {new_code}")
+        return new_code
 
 
 def evening_routine():
@@ -82,9 +83,7 @@ def evening_routine():
         user_input = input(
             "Entrez le code du matin (ou tapez 'abandon' pour le révéler) : "
         )
-        if (
-            user_input.lower() == "abandon"
-        ): 
+        if user_input.lower() == "abandon":
             print(f"Le code était : {last_code}")
             break
         elif user_input == last_code:
@@ -99,8 +98,20 @@ if __name__ == "__main__":
     if current_hour >= EVENING_HOUR:
         evening_routine()
     elif current_hour >= MORNING_HOUR:
-        morning_routine()
+        code = morning_routine()
+
+        if code:
+            while True:
+                user_input = input("Ecris le code pour quitter: ")
+                try:
+                    inserted_code = int(user_input)
+                    if inserted_code == code:
+                        break
+                    else:
+                        print("Tu sais pas écrire, réessaie.")
+                except ValueError:
+                    print("Que des chiffres, s'il te plaît.")
     else:
         print(f"Il est trop tôt, relancez après {MORNING_HOUR}h pour obtenir un code.")
 
-    input("Appuyez sur n'importe quelle touche pour quitter...")
+        input("Appuyez sur n'importe quelle touche pour quitter...")
